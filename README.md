@@ -1,84 +1,83 @@
-# CYU AM — Dashboard de Gestion de Portefeuille
+# CYU AM — Portfolio Management Dashboard
 
-Dashboard professionnel de suivi et d'analyse de portefeuille financier multi-asset, developpe dans le cadre du Master 2 GIF (CY Tech).
+Professional multi-asset portfolio tracking and analysis dashboard, developed as part of the Master 2 GIF programme at CY Tech.
 
 ---
 
-## Ce qui a ete realise
+## What Was Built
 
-### Infrastructure et donnees
+### Infrastructure & Data
 
-- **Base de donnees SQLite** avec 6 tables : `portfolios`, `transactions`, `market_prices`, `fx_rates`, `assets_info`, `nav_history`. Schema avec foreign keys, index et cache integre.
-- **Wrapper yfinance** avec cache SQLite automatique : les prix deja telecharges sont stockes localement, seules les dates manquantes sont fetchees. Couverture : actions, ETF, futures, forex.
-- **Module FX** : recuperation des taux de change quotidiens (EURUSD, EURGBP, EURCHF) via yfinance, inversion automatique pour conversion vers EUR, forward-fill sur les jours sans cotation.
-- **Univers de 20 actifs** pre-configure : 12 actions (4 secteurs), 4 ETF, 2 matieres premieres, 2 paires forex. Extensible via ticker Yahoo personnalise.
+- **SQLite database** with 6 tables: `portfolios`, `transactions`, `market_prices`, `fx_rates`, `assets_info`, `nav_history`. Schema includes foreign keys, indexes, and a built-in cache.
+- **yfinance wrapper** with automatic SQLite cache: already-downloaded prices are stored locally, and only missing dates are fetched. Coverage: equities, ETFs, futures, forex.
+- **FX module**: retrieval of daily exchange rates (EURUSD, EURGBP, EURCHF) via yfinance, automatic inversion for EUR conversion, forward-fill on non-trading days.
+- **Universe of 20 pre-configured assets**: 12 equities (4 sectors), 4 ETFs, 2 commodities, 2 forex pairs. Extensible via custom Yahoo ticker.
 
-### Portfolio Engine (coeur du systeme)
+### Portfolio Engine (Core System)
 
-Algorithme de reconstitution NAV jour par jour :
-1. Charge les transactions du portefeuille
-2. Pour chaque jour ouvre, applique les achats/ventes
-3. Valorise chaque position : `quantite x prix_local x taux_FX`
-4. Somme toutes les positions + cash = **NAV quotidienne en EUR**
+Day-by-day NAV reconstruction algorithm:
 
-Gestion multi-devises complete : un portefeuille peut mixer des actifs EUR, USD, GBP et matieres premieres, tout est converti en EUR automatiquement.
+1. Loads portfolio transactions
+2. For each business day, applies buys/sells
+3. Values each position: `quantity x local_price x FX_rate`
+4. Sums all positions + cash = **daily NAV in EUR**
 
-Calcul du VWAP (prix moyen pondere) et du P&L realise/latent par position.
+Full multi-currency support: a portfolio can mix EUR, USD, GBP assets and commodities — everything is automatically converted to EUR. VWAP (volume-weighted average price) and realised/unrealised P&L computed per position.
 
-### Metriques financieres (28 indicateurs)
+### Financial Metrics (28 Indicators)
 
-**Performance** : rendement total, CAGR, YTD, MTD, rendements mensuels (heatmap-ready), rendements cumules, rendements par periode (1M, 3M, 6M, 1A).
+**Performance**: total return, CAGR, YTD, MTD, monthly returns (heatmap-ready), cumulative returns, period returns (1M, 3M, 6M, 1Y).
 
-**Risque** : volatilite annualisee, Sharpe, Sortino, Omega, Calmar, Max Drawdown (valeur + duree), VaR 95% (historique et parametrique), CVaR/Expected Shortfall, skewness, kurtosis.
+**Risk**: annualised volatility, Sharpe, Sortino, Omega, Calmar, Max Drawdown (value + duration), VaR 95% (historical and parametric), CVaR/Expected Shortfall, skewness, kurtosis.
 
-**Benchmark** : Beta, Alpha de Jensen, Tracking Error, Information Ratio, correlation, Up/Down Capture Ratio.
+**Benchmark**: Beta, Jensen's Alpha, Tracking Error, Information Ratio, correlation, Up/Down Capture Ratio.
 
-**Rolling** : toutes les metriques ci-dessus sur fenetres glissantes 30j, 90j, 252j.
+**Rolling**: all the above metrics on 30d, 90d, 252d rolling windows.
 
-### Optimisation de portefeuille
+### Portfolio Optimisation
 
-- **Portefeuille de variance minimale** (scipy.optimize)
-- **Portefeuille Max Sharpe** (tangent portfolio)
-- **Frontiere efficiente** : 50 points calcules par resolution sequentielle sous contrainte de rendement cible
-- **Simulation Monte Carlo** : jusqu'a 10 000 portefeuilles aleatoires
-- Comparaison allocation actuelle vs allocations optimales
-- Option vente a decouvert activable
+- **Minimum variance portfolio** (scipy.optimize)
+- **Max Sharpe portfolio** (tangent portfolio)
+- **Efficient frontier**: 50 points computed via sequential optimisation under target-return constraints
+- **Monte Carlo simulation**: up to 10,000 random portfolios
+- Comparison of current allocation vs optimal allocations
+- Short-selling option available
 
-### Reporting PDF
+### PDF Reporting
 
-Generation automatique d'un rapport PDF de 5 pages (ReportLab) :
+Automatic generation of a 5-page PDF report (ReportLab):
 
-| Page | Contenu |
+| Page | Content |
 |------|---------|
-| 1 | Page de garde (nom, benchmark, periode) |
-| 2 | Resume executif : KPIs + metriques risque + comparaison benchmark par periode |
-| 3 | Rendements mensuels : heatmap coloree (vert/rouge) |
-| 4 | Analyse des risques : tableau complet 17 metriques en 2 colonnes |
-| 5 | Composition : positions actuelles avec P&L + historique des transactions |
+| 1 | Cover page (name, benchmark, period) |
+| 2 | Executive summary: KPIs + risk metrics + benchmark comparison by period |
+| 3 | Monthly returns: colour-coded heatmap (green/red) |
+| 4 | Risk analysis: full 17-metric table in 2 columns |
+| 5 | Composition: current positions with P&L + transaction history |
 
-Fond noir professionnel sur chaque page, footer avec nom du portefeuille et numero de page. Export en bytes (telechargement Streamlit) ou sauvegarde fichier.
+Professional dark background on every page, footer with portfolio name and page number. Export as bytes (Streamlit download) or file save.
 
-### Dashboard Streamlit (7 pages)
+### Streamlit Dashboard (7 Pages)
 
 | Page | Description |
 |------|-------------|
-| **Overview** | 8 KPI cards, courbe NAV base 100 vs benchmark, allocation par classe/actif (pie charts), bar chart performance par actif |
-| **Performance** | Tableau comparatif par periode vs benchmark, rendements cumules, heatmap mensuelle, distribution des rendements + courbe normale, underwater chart, rolling volatilite/Sharpe |
-| **Risques** | Tableau des 17+ metriques, matrice de correlation entre actifs, VaR en EUR, stress tests (-5% a -30%) |
-| **Positions** | Tableau detaille avec P&L colore, graphique chandelier interactif, fiche de l'actif |
-| **Transactions** | Creation de portefeuille, saisie de transaction (univers ou custom), import CSV avec template, historique filtrable + export |
-| **Optimisation** | Frontiere efficiente + scatter Monte Carlo colore par Sharpe, points Min Variance / Max Sharpe / Actuel, tableau allocations, bar chart poids optimaux |
-| **Reporting** | Selection periode (mensuel/trimestriel/custom), apercu, generation PDF, telechargement, sauvegarde sur disque |
+| **Overview** | 8 KPI cards, NAV base-100 curve vs benchmark, allocation by class/asset (pie charts), per-asset performance bar chart |
+| **Performance** | Period comparison table vs benchmark, cumulative returns, monthly heatmap, return distribution + normal curve, underwater chart, rolling volatility/Sharpe |
+| **Risk** | Table of 17+ metrics, asset correlation matrix, VaR in EUR, stress tests (-5% to -30%) |
+| **Positions** | Detailed table with coloured P&L, interactive candlestick chart, asset info card |
+| **Transactions** | Portfolio creation, transaction entry (universe or custom), CSV import with template, filterable history + export |
+| **Optimisation** | Efficient frontier + Monte Carlo scatter coloured by Sharpe, Min Variance / Max Sharpe / Current points, allocation table, optimal weights bar chart |
+| **Reporting** | Period selection (monthly/quarterly/custom), preview, PDF generation, download, save to disk |
 
-Dark mode professionnel : fond `#0E1117`, accents verts `#00D4AA` et bleus `#4A9EFF`, positif `#26A69A`, negatif `#EF5350`.
+Professional dark mode: background `#0E1117`, green accents `#00D4AA` and blue `#4A9EFF`, positive `#26A69A`, negative `#EF5350`.
 
 ---
 
-## Comment lancer le dashboard
+## Getting Started
 
-### Prerequis
+### Prerequisites
 
-Python 3.10+ et pip.
+Python 3.10+ and pip.
 
 ### Installation
 
@@ -87,128 +86,128 @@ cd "Projet dashboard portfolio"
 pip install -r requirements.txt
 ```
 
-### Lancement
+### Launch
 
 ```bash
 python -m streamlit run cyu_am/app.py
 ```
 
-Le dashboard s'ouvre sur `http://localhost:8501`.
+The dashboard opens at `http://localhost:8501`.
 
-### Premier usage
+### First Use
 
-1. Aller dans **Transactions** > onglet "Creer un portefeuille"
-2. Renseigner nom, capital initial (ex: 100 000 EUR), date de creation
-3. Onglet "Ajouter une transaction" : selectionner un actif dans l'univers CYU AM ou saisir un ticker Yahoo personnalise
-4. Revenir sur **Overview** pour voir la NAV, les KPIs et l'allocation
-5. Aller dans **Reporting** pour generer un PDF
+1. Go to **Transactions** > "Create a portfolio" tab
+2. Enter name, initial capital (e.g. 100,000 EUR), creation date
+3. "Add a transaction" tab: select an asset from the CYU AM universe or enter a custom Yahoo ticker
+4. Go back to **Overview** to see the NAV, KPIs and allocation
+5. Go to **Reporting** to generate a PDF
 
-On peut aussi importer un fichier CSV de transactions (template telechargeable dans l'interface).
+You can also import a CSV transaction file (downloadable template available in the interface).
 
 ---
 
-## Architecture du code
+## Code Architecture
 
 ```
 cyu_am/
-  app.py                         Point d'entree Streamlit
+  app.py                   Streamlit entry point
   config/
-    settings.py                  Parametres (DB path, couleurs, taux sans risque)
-    tickers.py                   Univers de 20 actifs + helpers
-    benchmarks.py                4 benchmarks (S&P500, CAC40, MSCI World, EuroStoxx50)
+    settings.py            Parameters (DB path, colours, risk-free rate)
+    tickers.py             Universe of 20 assets + helpers
+    benchmarks.py          4 benchmarks (S&P 500, CAC 40, MSCI World, Euro Stoxx 50)
   data/
-    database.py                  SQLite : schema, connexion, CRUD
-    market_data.py               yfinance + cache SQLite
-    fx_data.py                   Taux de change quotidiens
-    portfolio_engine.py          Reconstitution NAV multi-asset/multi-devise
+    database.py            SQLite: schema, connection, CRUD
+    market_data.py         yfinance + SQLite cache
+    fx_data.py             Daily exchange rates
+    portfolio_engine.py    Multi-asset/multi-currency NAV reconstruction
   metrics/
-    performance.py               Rendements, CAGR, YTD, MTD, heatmap
-    risk.py                      28 metriques de risque + risk_summary()
-    rolling.py                   Metriques sur fenetres glissantes
-    optimization.py              Markowitz, Monte Carlo, frontiere efficiente
+    performance.py         Returns, CAGR, YTD, MTD, heatmap
+    risk.py                28 risk metrics + risk_summary()
+    rolling.py             Metrics on rolling windows
+    optimization.py        Markowitz, Monte Carlo, efficient frontier
   pages/
-    1_overview.py                Page vue d'ensemble
-    2_performance.py             Page analyse de performance
-    3_risk.py                    Page analyse des risques
-    4_positions.py               Page detail des positions
-    5_transactions.py            Page gestion des transactions
-    6_optimization.py            Page optimisation Markowitz
-    7_reporting.py               Page generation PDF
+    1_overview.py          Overview page
+    2_performance.py       Performance analysis page
+    3_risk.py              Risk analysis page
+    4_positions.py         Positions detail page
+    5_transactions.py      Transaction management page
+    6_optimization.py      Markowitz optimisation page
+    7_reporting.py         PDF generation page
   reporting/
-    pdf_generator.py             Orchestrateur PDF
-    charts_export.py             Plotly vers PNG (necessite kaleido)
-    sections/                    5 sections du rapport PDF
+    pdf_generator.py       PDF orchestrator
+    charts_export.py       Plotly to PNG (requires kaleido)
+    sections/              5 PDF report sections
   ui/
-    components.py                KPI cards, badges, selecteurs
-    charts.py                    10 fonctions Plotly
-    style.css                    Dark mode CSS
+    components.py          KPI cards, badges, selectors
+    charts.py              10 Plotly functions
+    style.css              Dark mode CSS
   utils/
-    formatters.py                Formatage EUR, %, ratios
+    formatters.py          EUR, %, ratio formatting
 ```
 
-### Flux de donnees
+### Data Flow
 
 ```
 yfinance -----> market_data.py + fx_data.py -----> SQLite (cache)
-                                                      |
-transactions (SQLite) -----> portfolio_engine.py -----> NAV quotidienne EUR
-                                                      |
-                              metrics/ (performance, risk, benchmark, rolling)
-                                                      |
-                              ui/charts.py -----> pages/*.py -----> app.py
-                                                      |
-                              reporting/pdf_generator.py -----> PDF
+                                                        |
+transactions (SQLite) -----> portfolio_engine.py -----> daily NAV in EUR
+                                                        |
+                        metrics/ (performance, risk, benchmark, rolling)
+                                                        |
+                        ui/charts.py -----> pages/*.py -----> app.py
+                                                        |
+                        reporting/pdf_generator.py -----> PDF
 ```
 
-### Principes de conception
+### Design Principles
 
-- **Metriques = fonctions pures** : entree DataFrame/Series, sortie scalaire. Faciles a tester.
-- **Cache SQLite** : les prix et taux FX sont stockes localement, seules les nouvelles dates sont fetchees.
-- **Pas de cle API** : tout est gratuit (yfinance, FRED CSV).
-- **Multi-portefeuille** : chaque portefeuille est independant avec ses propres transactions et metriques.
-- **Conversion FX centralisee** : la conversion multi-devises se fait dans le portfolio engine, pas dans l'UI.
+- **Metrics = pure functions**: input DataFrame/Series, output scalar. Easy to test independently.
+- **SQLite cache**: prices and FX rates are stored locally; only new dates are fetched.
+- **No API key required**: everything is free (yfinance).
+- **Multi-portfolio**: each portfolio is independent with its own transactions and metrics.
+- **Centralised FX conversion**: multi-currency conversion happens in the portfolio engine, not in the UI.
 
 ---
 
-## Dependances
+## Dependencies
 
 | Package | Role |
 |---------|------|
-| `streamlit` | Framework dashboard |
-| `streamlit-option-menu` | Navigation sidebar avec icones |
-| `yfinance` | Donnees de marche (OHLCV, fondamentaux) |
-| `plotly` | Graphiques interactifs (dark mode) |
-| `pandas` / `numpy` | Manipulation de donnees |
-| `scipy` | Optimisation (Markowitz) + distribution normale (VaR) |
-| `reportlab` | Generation PDF |
-| `openpyxl` | Lecture/ecriture Excel |
+| `streamlit` | Dashboard framework |
+| `streamlit-option-menu` | Sidebar navigation with icons |
+| `yfinance` | Market data (OHLCV, fundamentals) |
+| `plotly` | Interactive charts (dark mode) |
+| `pandas` / `numpy` | Data manipulation |
+| `scipy` | Optimisation (Markowitz) + normal distribution (VaR) |
+| `reportlab` | PDF generation |
+| `openpyxl` | Excel read/write |
 
 ---
 
-## Pistes d'amelioration
+## Roadmap
 
-### Priorite haute
+### High Priority
 
-- **Tests unitaires** : ecrire les tests pour `metrics/performance.py`, `metrics/risk.py` et `portfolio_engine.py`. Les metriques sont des fonctions pures, donc tres faciles a tester avec des series synthetiques.
-- **Graphiques dans le PDF** : installer `kaleido` (`pip install kaleido`) pour exporter les graphiques Plotly en PNG et les inserer dans le rapport. Le code est deja prepare (`charts_export.py`), il suffit d'appeler `fig_to_temp_file()` et passer le chemin aux sections.
-- **Gestion des erreurs yfinance** : certains tickers (ex: `MC.PA`) peuvent remonter "possibly delisted" temporairement. Ajouter un retry avec fallback sur les donnees en cache.
+- **Unit tests**: write tests for `metrics/performance.py`, `metrics/risk.py` and `portfolio_engine.py`. Metrics are pure functions, making them very easy to test with synthetic series.
+- **Charts in PDF**: install `kaleido` (`pip install kaleido`) to export Plotly charts as PNG and embed them in the report. The code is already wired (`charts_export.py`) — just call `fig_to_temp_file()` and pass the path to the sections.
+- **yfinance error handling**: some tickers (e.g. `MC.PA`) may intermittently return "possibly delisted". Add a retry with cache fallback.
 
-### Priorite moyenne
+### Medium Priority
 
-- **Dividendes et splits** : yfinance avec `auto_adjust=True` ajuste les prix historiques, mais le P&L affiche ne distingue pas le gain en capital du rendement de dividende. Ajouter un tracking separee des dividendes verses.
-- **Contribution a la performance** : decomposer le rendement total par actif et par classe d'actif (attribution de performance Brinson).
-- **Commentaire de gestion** : ajouter un champ texte libre dans la page Reporting pour que le gerant puisse ecrire un commentaire qui sera inclus dans le PDF.
-- **Frontiere efficiente 3D** : ajouter une vue 3D (rendement x volatilite x Sharpe) avec Plotly `Surface` ou `Scatter3d`.
-- **Alertes** : notifications quand un actif depasse un seuil de drawdown ou quand le portefeuille s'ecarte trop de l'allocation cible.
+- **Dividends and splits**: yfinance with `auto_adjust=True` adjusts historical prices, but the displayed P&L does not distinguish capital gain from dividend yield. Add separate dividend tracking.
+- **Performance attribution**: decompose total return by asset and asset class (Brinson attribution).
+- **Management commentary**: add a free-text field in the Reporting page so the manager can write a comment to be included in the PDF.
+- **3D efficient frontier**: add a 3D view (return x volatility x Sharpe) using Plotly Surface or Scatter3d.
+- **Alerts**: notifications when an asset exceeds a drawdown threshold or when the portfolio drifts too far from the target allocation.
 
-### Priorite basse
+### Low Priority
 
-- **Migration PostgreSQL** : si le projet evolue vers du multi-utilisateur, migrer de SQLite vers PostgreSQL (le schema est compatible).
-- **Deploiement Streamlit Cloud** : heberger le dashboard en ligne pour acces distant.
-- **DuckDB** : remplacer SQLite par DuckDB pour des requetes analytiques plus performantes sur de gros volumes OHLCV.
-- **Backtest integre** : permettre de simuler des strategies de trading (momentum, mean-reversion) directement depuis le dashboard avec les donnees historiques.
-- **API REST** : exposer les metriques via une API FastAPI pour integration avec d'autres outils.
+- **PostgreSQL migration**: if the project evolves toward multi-user, migrate from SQLite to PostgreSQL (schema is compatible).
+- **Streamlit Cloud deployment**: host the dashboard online for remote access.
+- **DuckDB**: replace SQLite with DuckDB for more performant analytical queries on large OHLCV volumes.
+- **Integrated backtest**: allow simulation of trading strategies (momentum, mean-reversion) directly from the dashboard using historical data.
+- **REST API**: expose metrics via a FastAPI endpoint for integration with other tools.
 
 ---
 
-*Projet Master 2 GIF — CY Tech / CYU Asset Management*
+*Master 2 GIF Project — CY Tech / CYU Asset Management*
