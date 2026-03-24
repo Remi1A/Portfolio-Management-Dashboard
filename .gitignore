@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.spec
+*.zip
+
+# Base de données SQLite (données locales, ne pas versionner)
+*.db
+*.db-journal
+*.sqlite
+
+# Environnements virtuels
+venv/
+env/
+.venv/
+.env
+
+# Exports PDF générés automatiquement
+cyu_am/exports/
+exports/
+
+# IDE / OS
+.vscode/
+.idea/
+*.DS_Store
+Thumbs.db
+
+# Kaleido / cache
+.kaleido/
+
+# Claude Code local config
+.claude/
+
+# Logs
+*.log
