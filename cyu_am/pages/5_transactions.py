@@ -134,10 +134,10 @@ def _render_add_transaction():
         tx_date = st.date_input("Date", value=date.today(), max_value=date.today(), key="tx_date")
         action = st.selectbox("Action", ["BUY", "SELL"], key="tx_action")
     with col2:
-        ticker_mode = st.radio("Ticker", ["Univers CYU AM", "Personnalise"],
+        ticker_mode = st.radio("Ticker", ["Univers CY Tech AM", "Personnalise"],
                                horizontal=True, key="tx_mode")
 
-    if ticker_mode == "Univers CYU AM":
+    if ticker_mode == "Univers CY Tech AM":
         ticker_options = [f"{t} — {m['name']}" for t, m in UNIVERSE.items()]
         selected_ticker = st.selectbox("Actif", ticker_options, key="tx_asset")
         ticker = selected_ticker.split(" — ")[0]
