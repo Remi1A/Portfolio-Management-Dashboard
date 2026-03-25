@@ -1,4 +1,4 @@
-"""Univers d'investissement CYU AM — actifs, classes et métadonnées."""
+"""Univers d'investissement CY Tech AM — actifs, classes et métadonnées."""
 
 ASSET_CLASSES = ("EQUITY", "ETF", "BOND", "FOREX", "COMMODITY")
 
