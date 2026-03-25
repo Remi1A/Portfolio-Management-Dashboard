@@ -1,4 +1,4 @@
-# CYU AM — Portfolio Management Dashboard
+# CY Tech AM — Portfolio Management Dashboard
 
 Professional multi-asset portfolio tracking and analysis dashboard, developed as part of the Master 2 GIF programme at CY Tech.
 
@@ -98,7 +98,7 @@ The dashboard opens at `http://localhost:8501`.
 
 1. Go to **Transactions** > "Create a portfolio" tab
 2. Enter name, initial capital (e.g. 100,000 EUR), creation date
-3. "Add a transaction" tab: select an asset from the CYU AM universe or enter a custom Yahoo ticker
+3. "Add a transaction" tab: select an asset from the CY Tech AM universe or enter a custom Yahoo ticker
 4. Go back to **Overview** to see the NAV, KPIs and allocation
 5. Go to **Reporting** to generate a PDF
 
@@ -210,4 +210,4 @@ transactions (SQLite) -----> portfolio_engine.py -----> daily NAV in EUR
 
 ---
 
-*Master 2 GIF Project — CY Tech / CYU Asset Management*
+*Master 2 GIF Project — CY Tech / CY Tech AM*
