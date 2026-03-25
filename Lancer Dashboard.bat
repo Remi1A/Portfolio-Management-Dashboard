@@ -1,9 +1,9 @@
 @echo off
-title CYU AM - Portfolio Dashboard
+title CY Tech AM - Portfolio Dashboard
 cd /d "%~dp0"
 
 echo ============================================
-echo    CYU AM - Portfolio Dashboard
+echo    CY Tech AM - Portfolio Dashboard
 echo ============================================
 echo.
 echo Demarrage du dashboard...
