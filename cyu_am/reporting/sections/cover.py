@@ -26,7 +26,7 @@ def build_cover(portfolio_name: str, benchmark_name: str,
         "CoverTitle", fontSize=32, fontName="Helvetica-Bold",
         textColor=TEXT_WHITE, alignment=TA_CENTER, spaceAfter=20,
     )
-    elements.append(Paragraph("CYU Asset Management", title_style))
+    elements.append(Paragraph("CY Tech AM", title_style))
 
     # Sous-titre
     subtitle_style = ParagraphStyle(
