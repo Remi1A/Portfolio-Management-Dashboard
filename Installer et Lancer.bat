@@ -1,9 +1,9 @@
 @echo off
-title CYU AM - Installation et Lancement
+title CY Tech AM - Installation et Lancement
 cd /d "%~dp0"
 
 echo ============================================
-echo    CYU AM - Portfolio Dashboard
+echo    CY Tech AM - Portfolio Dashboard
 echo ============================================
 echo.
 
