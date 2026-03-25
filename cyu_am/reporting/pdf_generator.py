@@ -191,7 +191,7 @@ def generate_monthly_report(portfolio_id: int,
         canvas.setFillColor(TEXT_GRAY)
         canvas.setFont("Helvetica", 7)
         canvas.drawString(1.5 * cm, 0.8 * cm,
-                          f"CYU Asset Management - {portfolio['name']} - {gen_date}")
+                          f"CY Tech AM - {portfolio['name']} - {gen_date}")
         canvas.drawRightString(A4[0] - 1.5 * cm, 0.8 * cm,
                                f"Page {doc.page}")
         canvas.restoreState()
