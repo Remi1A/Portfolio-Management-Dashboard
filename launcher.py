@@ -1,5 +1,5 @@
 """
-CYU AM - Launcher pour le dashboard.
+CY Tech AM - Launcher pour le dashboard.
 
 Lance Streamlit directement (sans subprocess) pour compatibilite .exe PyInstaller.
 """
@@ -77,7 +77,7 @@ def main():
     os.chdir(data_dir)
 
     print("=" * 50)
-    print("   CYU AM - Portfolio Dashboard")
+    print("   CY Tech AM - Portfolio Dashboard")
     print("=" * 50)
     print()
     print("Demarrage du serveur...")
