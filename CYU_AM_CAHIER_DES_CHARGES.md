@@ -1,7 +1,7 @@
-# 📊 CYU AM — Cahier des Charges
+# 📊 CY Tech AM — Cahier des Charges
 ## Dashboard de Gestion & Suivi de Portefeuille Financier
 
-> **Projet** : Master 2 GIF — CYU Asset Management  
+> **Projet** : Master 2 GIF — CY Tech AM  
 > **Stack cible** : Python · Streamlit · yfinance · SQLite · Plotly · ReportLab  
 > **Ambition** : Dashboard professionnel dark mode, multi-asset (actions, ETF, obligations, forex, matières premières), avec benchmarking et reporting PDF automatisé mensuel  
 > **Saisie des transactions** : manuelle via interface + import CSV/Excel  
@@ -28,7 +28,7 @@
 
 ### Contexte
 
-CYGIF Asset Management doit remplacer ses processus manuels de reporting par un outil automatisé, fiable et professionnel. Le dashboard **CYU AM** est conçu comme un véritable outil institutionnel de gestion de portefeuille, à la frontière entre un terminal Bloomberg simplifié et un rapport mensuel automatisé.
+CYGIF Asset Management doit remplacer ses processus manuels de reporting par un outil automatisé, fiable et professionnel. Le dashboard **CY Tech AM** est conçu comme un véritable outil institutionnel de gestion de portefeuille, à la frontière entre un terminal Bloomberg simplifié et un rapport mensuel automatisé.
 
 ### Objectifs stratégiques
 
@@ -596,7 +596,7 @@ from streamlit_option_menu import option_menu
 
 with st.sidebar:
     page = option_menu(
-        "CYU AM", 
+        "CY Tech AM", 
         ["Overview", "Performance", "Risques", "Positions", 
          "Transactions", "Optimisation", "Reporting"],
         icons=["house", "graph-up", "shield", "briefcase", 
@@ -711,4 +711,4 @@ with st.sidebar:
 ---
 
 *Document rédigé dans le cadre du Master 2 GIF — CY Tech / CY Université*  
-*Projet CYU AM — Dashboard de gestion de portefeuille*
+*Projet CY Tech AM — Dashboard de gestion de portefeuille*
