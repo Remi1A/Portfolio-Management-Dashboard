@@ -1,4 +1,4 @@
-﻿"""CYU AM - Dashboard de gestion de portefeuille."""
+﻿"""CY Tech AM - Dashboard de gestion de portefeuille."""
 
 import importlib
 
@@ -11,7 +11,7 @@ from cyu_am.data.database import init_db
 
 # Config Streamlit
 st.set_page_config(
-    page_title="CYU AM - Portfolio Dashboard",
+    page_title="CY Tech AM - Portfolio Dashboard",
     page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -25,7 +25,7 @@ try:
     from streamlit_option_menu import option_menu
 
     with st.sidebar:
-        st.markdown("## CYU AM")
+        st.markdown("## CY Tech AM")
         page = option_menu(
             menu_title=None,
             options=[
@@ -50,7 +50,7 @@ try:
         )
 except ImportError:
     with st.sidebar:
-        st.markdown("## CYU AM")
+        st.markdown("## CY Tech AM")
         page = st.radio(
             "Navigation",
             [
