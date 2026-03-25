@@ -1,9 +1,9 @@
 @echo off
-title CYU AM - Build EXE
+title CY Tech AM - Build EXE
 cd /d "%~dp0"
 
 echo ============================================
-echo    CYU AM - Construction du .exe
+echo    CY Tech AM - Construction du .exe
 echo ============================================
 echo.
 
@@ -20,7 +20,7 @@ echo Construction en cours (ca peut prendre 2-5 minutes)...
 echo.
 
 pyinstaller --noconfirm --onedir --console ^
-    --name "CYU AM Dashboard" ^
+    --name "CY Tech AM Dashboard" ^
     --add-data "cyu_am;cyu_am" ^
     --add-data "requirements.txt;." ^
     --hidden-import streamlit ^
@@ -56,8 +56,8 @@ echo    Construction terminee !
 echo ============================================
 echo.
 echo Le .exe se trouve dans:
-echo   dist\CYU AM Dashboard\CYU AM Dashboard.exe
+echo   dist\CY Tech AM Dashboard\CY Tech AM Dashboard.exe
 echo.
-echo Pour distribuer: copiez le dossier "dist\CYU AM Dashboard" en entier.
+echo Pour distribuer: copiez le dossier "dist\CY Tech AM Dashboard" en entier.
 echo.
 pause
