@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**CYU AM** — Professional portfolio management dashboard for Master 2 GIF (CY Tech).
+**CY Tech AM** — Professional portfolio management dashboard for Master 2 GIF (CY Tech).
 
 Multi-asset portfolio tracker (equities, ETFs, bonds, forex, commodities) with:
 - Transaction-based NAV reconstruction with multi-currency conversion to EUR
